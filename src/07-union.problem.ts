@@ -1,12 +1,11 @@
 // CODE
 
-import { expect, it } from "vitest";
-import { z } from "zod";
+import { expect, it } from 'vitest';
+import { z } from 'zod';
 
 const Form = z.object({
   repoName: z.string(),
-  privacyLevel: z.string(),
-  //              ^ 🕵️‍♂️
+  privacyLevel: z.enum(['private', 'public']),
 });
 
 export const validateFormInput = (values: unknown) => {
@@ -17,27 +16,27 @@ export const validateFormInput = (values: unknown) => {
 
 // TESTS
 
-it("Should fail if an invalid privacyLevel passed", async () => {
+it('Should fail if an invalid privacyLevel passed', async () => {
   expect(() =>
     validateFormInput({
-      repoName: "mattpocock",
-      privacyLevel: "something-not-allowed",
-    }),
+      repoName: 'mattpocock',
+      privacyLevel: 'something-not-allowed',
+    })
   ).toThrowError();
 });
 
-it("Should permit valid privacy levels", async () => {
+it('Should permit valid privacy levels', async () => {
   expect(
     validateFormInput({
-      repoName: "mattpocock",
-      privacyLevel: "private",
-    }).privacyLevel,
-  ).toEqual("private");
+      repoName: 'mattpocock',
+      privacyLevel: 'private',
+    }).privacyLevel
+  ).toEqual('private');
 
   expect(
     validateFormInput({
-      repoName: "mattpocock",
-      privacyLevel: "public",
-    }).privacyLevel,
-  ).toEqual("public");
+      repoName: 'mattpocock',
+      privacyLevel: 'public',
+    }).privacyLevel
+  ).toEqual('public');
 });
